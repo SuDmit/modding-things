@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+ 
+	<Operation Class="PatchOperationSequence">
+		<operations>
+			<li Class="PatchOperationAttributeAdd">
+				<xpath>Defs/ThingDef[defName="HeatPump"]</xpath>
+				<attribute>Name</attribute>
+				<value>HeatPump</value>
+				<success>Always</success>
+			</li>
+
+<!--
+			<li Class="PatchOperationReplace" MayRequire="Uuugggg.ReplaceStuff">
+				<xpath>Defs/ThingDef[defName="Cooler_Over"]/designatorDropdown</xpath>
+				<value>
+					<designatorDropdown>CoolerDropdown</designatorDropdown>
+				</value>
+			</li>	
+			
+			<li Class="PatchOperationAdd" MayRequire="Uuugggg.ReplaceStuff">
+				<xpath>Defs/ThingDef[defName="Cooler"]</xpath>
+				<order>Append</order>
+				<value>
+					<designatorDropdown>CoolerDropdown</designatorDropdown>
+				</value>
+			</li>
+-->			
+			<li Class="PatchOperationAdd" MayRequire="Uuugggg.ReplaceStuff">
+				<xpath>Defs/ThingDef[defName="HeatPump"]</xpath>
+				<order>Append</order>
+				<value>
+					<designatorDropdown>HeatPumpDropdown</designatorDropdown>
+				</value>
+			</li>
+<!--			
+			<li Class="PatchOperationAdd" MayRequire="Uuugggg.ReplaceStuff">
+				<xpath>Defs/ThingDef[defName="Vent"]</xpath>
+				<order>Prepend</order>
+				<value>
+					<designatorDropdown>VentDropdown</designatorDropdown>
+				</value>
+			</li>
+			
+-->			
+		</operations>
+	</Operation>
+</Patch>
+
