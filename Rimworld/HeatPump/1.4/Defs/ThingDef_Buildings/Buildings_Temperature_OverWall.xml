@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Defs>
+ 	
+	<ThingDef MayRequire="Uuugggg.ReplaceStuff" ParentName="HeatPump" Name="HeatPump_Over">
+		<defName>HeatPump_Over</defName>
+		<label>over-wall heatpump</label>
+		<designatorDropdown MayRequire="Uuugggg.ReplaceStuff">HeatPumpDropdown</designatorDropdown>
+		<graphicData>
+			<texPath>Things/Building/Misc/TempControl/HeatPump_Over</texPath>
+		</graphicData>
+		<altitudeLayer>BuildingOnTop</altitudeLayer>
+		<passability>PassThroughOnly</passability>
+		<blockWind>false</blockWind>
+		<fillPercent>.6</fillPercent>
+		<coversFloor>false</coversFloor>
+		<blockLight>false</blockLight>
+		<staticSunShadowHeight>.6</staticSunShadowHeight>
+		<building>
+			<canPlaceOverWall>false</canPlaceOverWall>
+			<isEdifice>false</isEdifice>
+		</building>
+		<designationHotKey>Misc6</designationHotKey>
+	</ThingDef>
+
+
+	<ThingDef MayRequire="Uuugggg.ReplaceStuff" ParentName="HeatPump_Over">
+		<defName>HeatPump_Over2W</defName>
+		<label>over-wall heatpump (wide)</label>
+		<graphicData>
+			<texPath>Things/Building/Misc/TempControl/HeatPump_Over2W</texPath>
+			<drawSize>(1,2)</drawSize>
+		</graphicData>
+		<size>(1,2)</size>
+	</ThingDef>
+
+
+	<DesignatorDropdownGroupDef MayRequire="Uuugggg.ReplaceStuff">
+		<defName>HeatPumpDropdown</defName>
+	</DesignatorDropdownGroupDef>
+<!--	
+	<DesignatorDropdownGroupDef MayRequire="Uuugggg.ReplaceStuff">
+		<defName>CoolerDropdown</defName>
+	</DesignatorDropdownGroupDef>
+-->	
+</Defs>
