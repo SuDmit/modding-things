@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
-using UnityEngine;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -16,6 +14,7 @@ namespace PineappleHeatPump
 		public static ThingDef HeatPump_Over = null;
 		public static ThingDef HeatPump_Over2W = null;
 		
+		//extends hardcoded check to allow placement over wall
 		public static void IsOverWall(this BuildableDef bdef, ref bool __result)
 		{
 			if (!__result)
@@ -28,28 +27,21 @@ namespace PineappleHeatPump
     public static class Mod
     {			
         static Mod()
-        {		
-#if DEBUG
-//			Harmony.DEBUG = true;
-			FileLog.Reset();
-			FileLog.Log("DEBUG");
-#endif
+        {			
 			Harmony harmony = new Harmony("SuDmit.Rimworld.HeatPumpOver.main");
-#if DEBUG			
-			Log.Message("Hello World1!");
-			FileLog.Log("Hello World1!");
-#endif		
-			
+		
 #if DEBUG		
 			Log.Message("[HeatPumpOver - Manual Patch] Starting initialization");
 			FileLog.Log("[HeatPumpOver - Manual Patch] Starting initialization");
-#endif				
+#endif			
+			//searches for specific class among all loaded
 			Type classInstance = (
 				from asm in AppDomain.CurrentDomain.GetAssemblies()
 				from type in asm.GetTypes()
 				where type.IsClass && type.FullName == "Replace_Stuff.OverWallDef"
-				select type).SingleOrDefault();
-
+				select type).SingleOrDefault(); //.SingleOrDefault() instead of .Single() prevents exception if not found
+			
+			
 			if (classInstance == null)
 			{
 #if DEBUG
@@ -58,53 +50,39 @@ namespace PineappleHeatPump
 #endif
 				return;
 			}
-						
-/*			ThingDef myDef1 = DefDatabase<ThingDef>.GetNamed("HeatPump_Over");
-			if (myDef1 != null)
-			{
-				HeatPumpInteractions.HeatPump_Over = myDef1;
-				Log.Message(myDef1.ToString());
-				FileLog.Log(myDef1.ToString()); 
-			}
-*/			
-/*			ThingDef myDef2 = DefDatabase<ThingDef>.GetNamed("HeatPump_Over2W");
-			if (myDef2 != null)
-			{
-				HeatPumpInteractions.HeatPump_Over2W = myDef2;	
-				Log.Message(myDef2.ToString());
-				FileLog.Log(myDef2.ToString()); 
-			}						
-*/			
-
-			try
+			
+#if DEBUG	//Not sure if try-catch block is really necessary, because if class exists, everything should work fine, and if not we already returned. Also if errors occur, them probably better be red I guess
+			try 
             {	
-				harmony.Patch(AccessTools.Method(classInstance, "IsOverWall"), null, postfix: new HarmonyMethod(typeof(HeatPumpInteractions), nameof(HeatPumpInteractions.IsOverWall)));
-							
-				harmony.Patch(typeof(PlaceWorker_ReversibleHeatPump).GetMethod("DrawGhost"), null, null, transpiler: new HarmonyMethod(typeof(WideVentLocationGhost), nameof(WideVentLocationGhost.Transpiler)));
-				
+#endif			
 				HeatPumpInteractions.HeatPump_Over = DefDatabase<ThingDef>.GetNamed("HeatPump_Over");
 				HeatPumpInteractions.HeatPump_Over2W = DefDatabase<ThingDef>.GetNamed("HeatPump_Over2W");
 				
+				//hooks up to Replace_Stuff.OverWallDef.IsOverWall() check
+				harmony.Patch(AccessTools.Method(classInstance, "IsOverWall"), null, postfix: new HarmonyMethod(typeof(HeatPumpInteractions), nameof(HeatPumpInteractions.IsOverWall)));
+				
+				//similar, but to PlaceWorker_ReversibleHeatPump.DrawGhost()
+				harmony.Patch(typeof(PlaceWorker_ReversibleHeatPump).GetMethod("DrawGhost"), null, null, transpiler: new HarmonyMethod(typeof(WideVentLocationGhost), nameof(WideVentLocationGhost.Transpiler)));
+	
 #if DEBUG				
-					Log.Message("[HeatPumpOver - Manual Patch] Successful");
-					FileLog.Log("[HeatPumpOver - Manual Patch] Successful"); 
-#endif					
+				Log.Message("[HeatPumpOver - Manual Patch] Successful");
+				FileLog.Log("[HeatPumpOver - Manual Patch] Successful"); 
+						
 			}
 			catch (Exception ex)
 			{
-#if DEBUG
+
 				Log.Message("[HeatPumpOver - Manual Patch] Error when init manual patching method");
 				FileLog.Log("[HeatPumpOver - Manual Patch] Error when init manual patching method");
-				
+					
                 Log.Message(ex.ToString());
                 FileLog.Log(ex.ToString());
-#endif				
 			}
-			
+#endif			
         }
     }
  
-	//Straight up copypasted from Replace_Stuff section for vanilla PlaceWorker_Cooler
+	//@SuDmit: Straight up copypasted entire class from Replace_Stuff source section for vanilla PlaceWorker_Cooler without real understanding. Does some magic with positioning of exhaust square
 	static class WideVentLocationGhost
 	{
 		public static IEnumerable<CodeInstruction> TranspileNorthWith(IEnumerable<CodeInstruction> instructions, OpCode paramCode)
