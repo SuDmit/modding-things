@@ -10,7 +10,15 @@
 				<value>HeatPump</value>
 				<success>Always</success>
 			</li>
+			<li Class="PatchOperationAdd" MayRequire="Uuugggg.ReplaceStuff">
+				<xpath>Defs/ThingDef[defName="HeatPump"]</xpath>
+				<order>Append</order>
+				<value>
+					<designatorDropdown>HeatPumpDropdown</designatorDropdown>
+				</value>
+			</li>
 
+<!-- Places coolers and vents into respective designator dropdowns. You need to uncomment CoolerDropdown def in Buildings_Temperature_OverWall.xml too -->
 <!--
 			<li Class="PatchOperationReplace" MayRequire="Uuugggg.ReplaceStuff">
 				<xpath>Defs/ThingDef[defName="Cooler_Over"]/designatorDropdown</xpath>
@@ -27,13 +35,7 @@
 				</value>
 			</li>
 -->			
-			<li Class="PatchOperationAdd" MayRequire="Uuugggg.ReplaceStuff">
-				<xpath>Defs/ThingDef[defName="HeatPump"]</xpath>
-				<order>Append</order>
-				<value>
-					<designatorDropdown>HeatPumpDropdown</designatorDropdown>
-				</value>
-			</li>
+
 <!--			
 			<li Class="PatchOperationAdd" MayRequire="Uuugggg.ReplaceStuff">
 				<xpath>Defs/ThingDef[defName="Vent"]</xpath>
